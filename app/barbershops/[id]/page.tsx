@@ -1,11 +1,11 @@
-import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ServiceItem } from "@/app/_components/service-item";
 import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
-import { ServiceItem } from "@/app/_components/service-item";
+import { prisma } from "@/lib/prisma";
+import { ChevronLeft } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { PhoneItem } from "../../_components/phone-item";
 
 const BarbershopPage = async (props: PageProps<"/barbershops/[id]">) => {
@@ -110,7 +110,10 @@ const BarbershopPage = async (props: PageProps<"/barbershops/[id]">) => {
           </div>
           <div className="flex w-full flex-col gap-3">
             {barbershop.services.map((service) => (
-              <ServiceItem key={service.id} service={service} />
+              <ServiceItem
+                key={service.id}
+                service={{ ...service, barbershop }}
+              />
             ))}
           </div>
         </div>

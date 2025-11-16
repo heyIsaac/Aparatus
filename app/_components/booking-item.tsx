@@ -3,19 +3,47 @@ import { Badge } from "./ui/badge";
 import { Avatar } from "./ui/avatar";
 import { Card } from "./ui/card";
 
-interface BookingItemProps {
-  serviceName: string;
-  barbershopName: string;
-  barbershopImageUrl: string;
+type BookingShape = {
+  service: {
+    id?: string;
+    barbershopId?: string;
+    name: string;
+    description?: string | null;
+    imageUrl?: string | null;
+    priceInCents?: number | null;
+  };
+  barbershop: {
+    id?: string;
+    name: string;
+    description?: string | null;
+    imageUrl?: string | null;
+    address?: string | null;
+    phones?: string[] | null;
+  };
   date: Date;
-}
+};
 
-const BookingItem = ({
-  serviceName,
-  barbershopName,
-  barbershopImageUrl,
-  date,
-}: BookingItemProps) => {
+type BookingItemProps =
+  | { booking: BookingShape }
+  | {
+      serviceName: string;
+      barbershopName: string;
+      barbershopImageUrl: string;
+      date: Date;
+    };
+
+const BookingItem = (props: BookingItemProps) => {
+  const { service, barbershop, date } =
+    "booking" in props
+      ? props.booking
+      : ({
+          service: { name: props.serviceName },
+          barbershop: {
+            name: props.barbershopName,
+            imageUrl: props.barbershopImageUrl,
+          },
+          date: props.date,
+        } as BookingShape);
   return (
     <Card className="flex h-full w-full min-w-full flex-row items-center justify-between p-0">
       {/* ESQUERDA */}
@@ -23,12 +51,12 @@ const BookingItem = ({
         <Badge>Confirmado</Badge>
 
         <div className="flex flex-col gap-2">
-          <p className="font-bold">{serviceName}</p>
+          <p className="font-bold">{service.name}</p>
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
-              <AvatarImage src={barbershopImageUrl} />
+              <AvatarImage src={barbershop.imageUrl ?? undefined} />
             </Avatar>
-            <p className="text-muted-foreground text-sm">{barbershopName}</p>
+            <p className="text-muted-foreground text-sm">{barbershop.name}</p>
           </div>
         </div>
       </div>
