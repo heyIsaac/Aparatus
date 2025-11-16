@@ -12,8 +12,15 @@ import {
   PageSectionScroller,
   PageSectionTitle,
 } from "./_components/ui/page";
+import { authClient } from "../lib/auth-client";
 
 const Home = async () => {
+  const { data: session } = authClient.useSession();
+  const handleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  };
   const recommendedBarbershops = await prisma.barbershop.findMany({
     orderBy: {
       name: "asc",
